@@ -4,6 +4,7 @@ const app = express();
 require("dotenv").config()
 const passport = require("passport")
 
+app.set("view engine","ejs")
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -16,7 +17,7 @@ passport.deserializeUser(function(obj,cb) {
 })
 
 app.get("/",(req,res) => {
-    res.send("Iam alive")
+    res.render("home")
 })
 
 let GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
@@ -31,6 +32,16 @@ function(accessToken,refreshToken,profile,done) {
     return done(null,userProfile)
 }
 ))
+
+app.get("/auth/google",passport.authenticate("google",{scope : ["profile","email"]}));
+
+app.get("/auth/google/callback",passport.authenticate("google",{
+    failureRedirect : "http://localhost:3000"
+}),
+function(req,res) {
+    res.send("Logged In Successfully")
+}
+)
 
 const PORT = process.env.PORT || 4000
 app.listen(PORT,() => {
