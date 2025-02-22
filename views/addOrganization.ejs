@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organization Form</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    /* General Styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #4CAF50;
+  padding: 15px 30px;
+  color: white;
+}
+
+.navbar .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navbar .nav-links {
+  list-style: none;
+  display: flex;
+}
+
+.navbar .nav-links li {
+  margin-left: 20px;
+}
+
+.navbar .nav-links a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+}
+
+.navbar .nav-links a:hover {
+  color: #ff9900;
+}
+
+/* Form Section */
+.form-container {
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: #f8f8f8;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.form-container h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.organization-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.organization-form label {
+  font-size: 16px;
+  color: #333;
+}
+
+.organization-form input,
+.organization-form select,
+.organization-form textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.organization-form textarea {
+  height: 100px;
+}
+
+.submit-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #333;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+
+</style>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">Org Form</div>
+    <ul class="nav-links">
+      <li><a href="home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Form Section -->
+  <section class="form-container">
+    <h1>Register Your Organization</h1>
+    <form class="organization-form">
+      <label for="org-name">Organization Name</label>
+      <input type="text" id="org-name" name="org-name" placeholder="Enter your organization's name" required>
+
+      <label for="org-type">Organization Type</label>
+      <select id="org-type" name="org-type" required>
+        <option value="">Select type</option>
+        <option value="NGO">NGO</option>
+        <option value="Private">Private</option>
+        <option value="Public">Public</option>
+        <option value="Government">Government</option>
+      </select>
+
+      <label for="org-email">Email Address</label>
+      <input type="email" id="org-email" name="org-email" placeholder="Enter your email" required>
+
+      <label for="org-phone">Phone Number</label>
+      <input type="tel" id="org-phone" name="org-phone" placeholder="Enter your phone number" required>
+
+      <label for="org-address">Address</label>
+      <textarea id="org-address" name="org-address" placeholder="Enter your organization's address" required></textarea>
+
+      <button type="submit" class="submit-btn">Submit</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Org Form. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

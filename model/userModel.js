@@ -16,8 +16,7 @@ module.exports = (sequelize,DataTypes)=>{
             unique : true
         },
         password : {
-            type : DataTypes.STRING,
-            allowNull : false
+            type : DataTypes.STRING
         },
         currentOrgNumber : {
             type : DataTypes.INTEGER,

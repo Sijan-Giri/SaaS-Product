@@ -2,7 +2,10 @@ const express = require("express");
 require("./model/index");
 const app = express();
 require("dotenv").config()
-const passport = require("passport")
+const passport = require("passport");
+const {users}  = require("./model/index");
+const generateToken = require("./services/generateToken");
+const organizationRoute = require("./routes/organizationRoutes")
 
 app.set("view engine","ejs")
 app.use(passport.initialize());
@@ -20,6 +23,7 @@ app.get("/",(req,res) => {
     res.render("home")
 })
 
+var userProfile
 let GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 passport.use(new GoogleStrategy({
@@ -34,14 +38,38 @@ function(accessToken,refreshToken,profile,done) {
 ))
 
 app.get("/auth/google",passport.authenticate("google",{scope : ["profile","email"]}));
-
 app.get("/auth/google/callback",passport.authenticate("google",{
     failureRedirect : "http://localhost:3000"
 }),
+async function(req,res) {
+    const userGoogleEmail = userProfile.emails[0].value
+    const user = await users.findOne({
+        where : {
+            email : userProfile.emails[0].value
+        }
+    })
+    if(user) {
+        const token = generateToken(user)
+        res.cookie("token",token);
+        res.redirect("/organization")
+    }
+    else {
+        const user = await users.create({
+            email : userGoogleEmail,
+            googleId : userProfile.id,
+            username : userProfile.displayName
+        })
+
+        const token = generateToken(user)
+        res.redirect("/organization")
+    }
+},
 function(req,res) {
     res.send("Logged In Successfully")
 }
 )
+
+app.use("/",organizationRoute)
 
 const PORT = process.env.PORT || 4000
 app.listen(PORT,() => {
