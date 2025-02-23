@@ -27,7 +27,6 @@ db.sequelize = sequelize
 // models 
 db.users = require("./userModel")(sequelize,DataTypes)
 
-
 db.sequelize.sync({force:false}).then(()=>{
     console.log("Migrated !!!")
 })
