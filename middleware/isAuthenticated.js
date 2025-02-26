@@ -4,13 +4,15 @@ const { users } = require("../model");
 
 exports.isAuthenticated = async(req,res,next) => {
     const {token} = req.cookies;
+    console.log(token);
+    return
 
     if(!token) {
         return res.redirect("/")
     }
 
+   try {
     const decoded = await promisify(jwt.verify)(token,process.env.SECRET_KEY)
-
     if(!decoded) {
         return res.redirect("/")
     }
@@ -22,12 +24,14 @@ exports.isAuthenticated = async(req,res,next) => {
     })
 
     if(userExists.length > 0) {
-        res.send("Not valid user")
+        return res.send("Not valid user")
     }
-    else {
         req.user = userExists;
         req.userId = userExists[0].id
         next();
-    }
+    
+   } catch (error) {
+    return res.send(error)
+   }
 
 }

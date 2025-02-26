@@ -135,27 +135,24 @@ footer {
   <!-- Form Section -->
   <section class="form-container">
     <h1>Register Your Organization</h1>
-    <form class="organization-form">
+    <form class="organization-form" action="/organization" method="post">
       <label for="org-name">Organization Name</label>
-      <input type="text" id="org-name" name="org-name" placeholder="Enter your organization's name" required>
-
-      <label for="org-type">Organization Type</label>
-      <select id="org-type" name="org-type" required>
-        <option value="">Select type</option>
-        <option value="NGO">NGO</option>
-        <option value="Private">Private</option>
-        <option value="Public">Public</option>
-        <option value="Government">Government</option>
-      </select>
-
+      <input type="text" id="org-name" name="organizationName" placeholder="Enter your organization's name" required>
+      
       <label for="org-email">Email Address</label>
-      <input type="email" id="org-email" name="org-email" placeholder="Enter your email" required>
+      <input type="email" id="org-email" name="organizationEmail" placeholder="Enter your email" required>
 
       <label for="org-phone">Phone Number</label>
-      <input type="tel" id="org-phone" name="org-phone" placeholder="Enter your phone number" required>
+      <input type="tel" id="org-phone" name="organizationPhoneNumber" placeholder="Enter your phone number" required>
+
+      <label for="org-phone">Pan Number</label>
+      <input type="tel" id="org-phone" name="organizationPanNumber" placeholder="Enter your phone number" >
+
+      <label for="org-phone">Vat Number</label>
+      <input type="tel" id="org-phone" name="organizationVatNumber" placeholder="Enter your phone number">
 
       <label for="org-address">Address</label>
-      <textarea id="org-address" name="org-address" placeholder="Enter your organization's address" required></textarea>
+      <textarea id="org-address" name="organizationAddress" placeholder="Enter your organization's address" required></textarea>
 
       <button type="submit" class="submit-btn">Submit</button>
     </form>

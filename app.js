@@ -6,10 +6,14 @@ const passport = require("passport");
 const {users}  = require("./model/index");
 const generateToken = require("./services/generateToken");
 const organizationRoute = require("./routes/organizationRoutes")
+const cookieParser = require("cookie-parser")
 
 app.set("view engine","ejs")
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.json());
+app.use(express.urlencoded({extended : true}));
+app.use(cookieParser())
 
 passport.serializeUser(function(user,cb) {
     cb(null,user)
