@@ -8,12 +8,12 @@ const generateToken = require("./services/generateToken");
 const organizationRoute = require("./routes/organizationRoutes")
 const cookieParser = require("cookie-parser")
 
+app.use(cookieParser())
 app.set("view engine","ejs")
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-app.use(cookieParser())
 
 passport.serializeUser(function(user,cb) {
     cb(null,user)
@@ -54,7 +54,7 @@ async function(req,res) {
     })
     if(user) {
         const token = generateToken(user)
-        res.cookie("token",token);
+        res.cookie("token",token , {httpOnly : true});
         res.redirect("/organization")
     }
     else {
@@ -65,6 +65,7 @@ async function(req,res) {
         })
 
         const token = generateToken(user)
+        res.cookie("token",token , {httpOnly : true});
         res.redirect("/organization")
     }
 },

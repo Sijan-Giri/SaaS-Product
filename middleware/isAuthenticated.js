@@ -4,8 +4,6 @@ const { users } = require("../model");
 
 exports.isAuthenticated = async(req,res,next) => {
     const {token} = req.cookies;
-    console.log(token);
-    return
 
     if(!token) {
         return res.redirect("/")
@@ -17,17 +15,17 @@ exports.isAuthenticated = async(req,res,next) => {
         return res.redirect("/")
     }
 
-    const userExists = await users.findAll({
+    const userExists = await users.findOne({
         where : {
             id : decoded.id
         }
     })
 
-    if(userExists.length > 0) {
+    if(!userExists) {
         return res.send("Not valid user")
     }
         req.user = userExists;
-        req.userId = userExists[0].id
+        req.userId = userExists.id
         next();
     
    } catch (error) {
