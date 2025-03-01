@@ -85,8 +85,7 @@ exports.createOrganization = async (req, res , next) => {
         await user.save();
         req.organizationNumber = organizationNumber;
         next()
-
-        res.redirect("/dashboard");
+        return;
     } catch (error) {
         console.error(error);
         res.status(500).send("An error occurred while creating the organization");
@@ -123,6 +122,33 @@ exports.createAnswerTable = async(req,res) => {
         res.redirect("/dashboard")
 }
 
-exports.renderDashboard = async(req,res) => {
+exports.renderDashboard = (req,res) => {
     res.render("dashboard/index.ejs")
 } 
+
+exports.renderForumPage = async(req,res) => {
+    const organizationNumber = req.user.currentOrgNumber;
+    const questions = await sequelize.query(`SELECT * FROM question_${organizationNumber}`,{
+        type : QueryTypes.SELECT
+    })
+    res.render("dashboard/forum.ejs",{questions : questions})
+}
+
+exports.renderQuestionPage = (req,res) => {
+    res.render("dashboard/askQuestion.ejs")
+}
+
+exports.createQuestion = async (req,res) => {
+    const organizationNumber = req.user.currentOrgNumber;
+    const userId = req.userId
+    const {title , description} = req.body;
+    if(!title || !description) {
+        return res.send("Please provide title & description")
+    }
+    
+    await sequelize.query(`INSERT INTO question_${organizationNumber} (title , description , userId) VALUES(?,?,?)`,{
+        type : QueryTypes.INSERT,
+        replacements : [title , description , userId]
+    })
+    res.redirect("/forum")
+}
