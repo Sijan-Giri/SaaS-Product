@@ -98,6 +98,7 @@ exports.createQuestionTable = async(req,res,next) => {
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
         title VARCHAR(255) ,
         description TEXT,
+        questionImage VARCHAR(255),
         userId INT NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
         created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -142,13 +143,24 @@ exports.createQuestion = async (req,res) => {
     const organizationNumber = req.user.currentOrgNumber;
     const userId = req.userId
     const {title , description} = req.body;
+    const file = req.file
     if(!title || !description) {
         return res.send("Please provide title & description")
     }
     
-    await sequelize.query(`INSERT INTO question_${organizationNumber} (title , description , userId) VALUES(?,?,?)`,{
+    await sequelize.query(`INSERT INTO question_${organizationNumber} (title , description , userId , questionImage) VALUES(?,?,?,?)`,{
         type : QueryTypes.INSERT,
-        replacements : [title , description , userId]
+        replacements : [title , description , userId ,file && file.filename || "https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500"]
     })
     res.redirect("/forum")
+}
+
+exports.renderSingleQuestion = async(req,res) => {
+    const {id} = req.params;
+    const organizationNumber = req.user.currentOrgNumber;
+    const question = await sequelize.query(`SELECT * FROM question_${organizationNumber} WHERE id=?`,{
+        type : QueryTypes.SELECT,
+        replacements : [id]
+    })
+    res.render("dashboard/singleQuestion.ejs",{question})
 }

@@ -9,6 +9,32 @@
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
 </head>
 
+<style>
+.see-more-btn {
+  font-size: 14px;
+  color: white;
+  background-color: #007bff;
+  border: 2px solid #007bff;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.see-more-btn:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.see-more-btn:focus {
+  outline: none;
+}
+
+
+</style>
+
 <body>
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
@@ -115,6 +141,7 @@
               <h5 class="card-title fw-semibold mb-4"><%- question.title %></h5>
               <p class="mb-0"><%- question.description %> </p>
             </div>
+            <button class="see-more-btn" onclick="window.location.href='/question/<%= question.id %>'">See More</button>
           </div>
        <% }) %>
       </div>

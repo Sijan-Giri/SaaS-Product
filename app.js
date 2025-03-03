@@ -15,6 +15,7 @@ app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(express.static("public/"))
+app.use(express.static("uploads/"))
 
 passport.serializeUser(function(user,cb) {
     cb(null,user)

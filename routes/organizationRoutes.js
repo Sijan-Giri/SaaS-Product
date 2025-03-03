@@ -1,4 +1,4 @@
-const { renderOrganizationForm, createOrganization, createQuestionTable, createAnswerTable, renderDashboard, renderForumPage, renderQuestionPage, createQuestion } = require("../controller/organizationController");
+const { renderOrganizationForm, createOrganization, createQuestionTable, createAnswerTable, renderDashboard, renderForumPage, renderQuestionPage, createQuestion, renderSingleQuestion } = require("../controller/organizationController");
 const { isAuthenticated } = require("../middleware/isAuthenticated");
 const {multer ,  storage} = require("../middleware/multerConfig");
 const uploads = multer({storage : storage})
@@ -15,5 +15,7 @@ router.route("/dashboard").get(isAuthenticated , renderDashboard)
 router.route("/forum").get(isAuthenticated , renderForumPage)
 
 router.route("/question").get(isAuthenticated , renderQuestionPage).post(isAuthenticated , uploads.single("questionImage") , createQuestion)
+
+router.route("/question/:id").get(isAuthenticated , renderSingleQuestion)
 
 module.exports = router

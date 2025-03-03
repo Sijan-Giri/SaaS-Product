@@ -9,6 +9,32 @@
   <link rel="stylesheet" href="../assets/css/styles.min.css" />
 </head>
 
+<style>
+.see-more-btn {
+  font-size: 14px;
+  color: white;
+  background-color: #007bff;
+  border: 2px solid #007bff;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.see-more-btn:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.see-more-btn:focus {
+  outline: none;
+}
+
+
+</style>
+
 <body>
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
@@ -42,12 +68,12 @@
             </li>
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Features</span>
+              <span class="hide-menu">Feautres</span>
             </li>
             <li class="sidebar-item">
               <a class="sidebar-link" href="/forum" aria-expanded="false">
                 <span>
-                  <i class="ti ti-article"></i>
+                  <i class="ti ti-login"></i>
                 </span>
                 <span class="hide-menu">Forum</span>
               </a>
@@ -79,6 +105,7 @@
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+              <a href="/question" target="_blank" class="btn btn-primary">Ask Question</a>
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -108,34 +135,22 @@
       </header>
       <!--  Header End -->
       <div class="container-fluid">
-        <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Hajur ko Question kxa sodhnu hola?</h5>
-              <div class="card">
-                <div class="card-body">
-                  <form action="/question" method="post" enctype="multipart/form-data">
-                    <div class="mb-3">
-                      <label for="question" class="form-label">What is your question?</label>
-                      <input type="text" class="form-control" name="title" id="question" aria-describedby="question">
-                    </div>
-                    <div class="mb-3">
-                      <label for="Elaborate" class="form-label">Could You Elaborate Your Question?</label> <br>
-                      <textarea rows="5" cols="138" name="description"></textarea>
-                    </div>
-                    <!-- File input for uploading files -->
-                    <div class="mb-3">
-                      <label for="fileUpload" class="form-label">Upload a File</label>
-                      <input type="file" class="form-control" name="questionImage" multiple ="fileUpload">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                  </form>
-                </div>
-              </div>
+              <h5 class="card-title fw-semibold mb-4"><%- question[0].title %> </h5>
+              <p class="mb-0"><%- question[0].description %>  </p>
             </div>
+            <img src="http://localhost:3000/<%- question[0].questionImage %>" height="300px" width="60%" alt="questionImage" srcset="">
           </div>
-        </div>
+
       </div>
     </div>
+  </div>
+  <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/sidebarmenu.js"></script>
+  <script src="../assets/js/app.min.js"></script>
+  <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+</body>
 
 </html>
