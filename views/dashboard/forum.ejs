@@ -138,8 +138,10 @@
         <% questions.forEach((question) => { %>
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4"><%- question.title %></h5>
-              <p class="mb-0"><%- question.description %> </p>
+              <h5 class="card-title fw-semibold mb-4"><%- question?.title %></h5>
+              <p class="mb-0"><%- question.description.slice(0,300) %>... </p>
+              <p class="mb-0">Asked By:- <%- question.username %> </p>
+              <p class="mb-0">Created At:- <%- question.created_At.toString().slice(0,15) %> </p>
             </div>
             <button class="see-more-btn" onclick="window.location.href='/question/<%= question.id %>'">See More</button>
           </div>

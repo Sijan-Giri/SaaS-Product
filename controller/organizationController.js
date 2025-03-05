@@ -129,7 +129,7 @@ exports.renderDashboard = (req,res) => {
 
 exports.renderForumPage = async(req,res) => {
     const organizationNumber = req.user.currentOrgNumber;
-    const questions = await sequelize.query(`SELECT * FROM question_${organizationNumber}`,{
+    const questions = await sequelize.query(`SELECT * FROM question_${organizationNumber} JOIN users ON question_${organizationNumber}.userId = users.id`,{
         type : QueryTypes.SELECT
     })
     res.render("dashboard/forum.ejs",{questions : questions})
@@ -162,5 +162,6 @@ exports.renderSingleQuestion = async(req,res) => {
         type : QueryTypes.SELECT,
         replacements : [id]
     })
+    console.log(question)
     res.render("dashboard/singleQuestion.ejs",{question})
 }

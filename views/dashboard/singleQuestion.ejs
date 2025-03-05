@@ -137,10 +137,10 @@
       <div class="container-fluid">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4"><%- question[0].title %> </h5>
-              <p class="mb-0"><%- question[0].description %>  </p>
+              <h5 class="card-title fw-semibold mb-4"><%- question[0]?.title %> </h5>
+              <p class="mb-0"><%- question[0]?.description %>  </p>
             </div>
-            <img src="http://localhost:3000/<%- question[0].questionImage %>" height="300px" width="60%" alt="questionImage" srcset="">
+            <img src="http://localhost:3000/<%- question[0]?.questionImage %>" height="300px" width="60%" alt="questionImage" srcset="">
           </div>
 
       </div>
