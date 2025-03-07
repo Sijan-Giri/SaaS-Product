@@ -136,21 +136,26 @@
       </header>
       <!--  Header End -->
       <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4"><%- question[0]?.title %> </h5>
-              <p class="mb-0"><%- question[0]?.description %>  </p>
+          <%- answers.forEach((answer) => { %>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4"><%- answer.answer %> </h5>
+                <p class="mb-0"><%- question[0]?.description %>  </p>
+              </div>
+              <img src="http://localhost:3000/<%- question[0]?.questionImage %>" height="300px" width="60%" alt="questionImage" srcset="">
             </div>
-            <img src="http://localhost:3000/<%- question[0]?.questionImage %>" height="300px" width="60%" alt="questionImage" srcset="">
-          </div>
+          <%- }) %>
 
       </div>
       <h4>Your Answer:-</h4> <br>
-      <div id="editor">
-        <p>Hello World!</p>
-        <p>Some initial <strong>bold</strong> text</p>
-        <p><br /></p>
-      </div>
+      <form id="answerForm">
+        <div id="editor">
+          <p>Your answer goes here...</p>
+          <p><br /></p>
+        </div>
+        <input type="hidden" id="questionId" name="questionId" value="<%- question[0].id %>">
+        <button type="submit">Submit</button>
+      </form>
     </div>
   </div>
   <!-- Include the Quill library -->
@@ -161,6 +166,33 @@
   const quill = new Quill('#editor', {
     theme: 'snow'
   });
+  var editor_content = quill.container.innerHTML
+
+  function getEditorContent() {
+    return quill.root.innerHTML.trim()
+  }
+
+  document.getElementById("answerForm").addEventListener("submit",async(e) => {
+    e.preventDefault()
+    const answerContent = getEditorContent()
+    const questionId = document.getElementById("questionId").value;
+    
+    const response = await fetch("/answer",{
+      method : "POST",
+      headers : {
+        "Content-Type" : "application/json"
+      },
+      body : JSON.stringify({text : answerContent , questionId : questionId})
+    })
+    const data = await response.json();
+    if(data.status == 200) {
+      window.location.reload()
+    }
+    else {
+      alert("Something went wrong!")
+    }
+  })
+
 </script>
   <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
   <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

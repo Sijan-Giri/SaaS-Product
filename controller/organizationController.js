@@ -158,10 +158,29 @@ exports.createQuestion = async (req,res) => {
 exports.renderSingleQuestion = async(req,res) => {
     const {id} = req.params;
     const organizationNumber = req.user.currentOrgNumber;
+    const answers = await sequelize.query(`SELECT * FROM answer_${organizationNumber} WHERE questionId=?`,{
+        type : QueryTypes.SELECT,
+        replacements : [id]
+    })
     const question = await sequelize.query(`SELECT * FROM question_${organizationNumber} WHERE id=?`,{
         type : QueryTypes.SELECT,
         replacements : [id]
     })
 
-    res.render("dashboard/singleQuestion.ejs",{question})
+    res.render("dashboard/singleQuestion.ejs",{question , answers})
+}
+
+exports.answerQuestion = async(req,res) => {
+    const organizationNumber = req.user.currentOrgNumber;
+    const {text , questionId} = req.body;
+    const userId = req.userId;
+
+    await sequelize.query(`INSERT INTO answer_${organizationNumber} (userId , questionId , answer) VALUES (?,?,?)`,{
+        type : QueryTypes.INSERT,
+        replacements : [userId,questionId,text]
+    })
+    res.json({
+        status : 200,
+        message : "Answer sent successfully"
+    })
 }
