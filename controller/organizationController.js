@@ -158,16 +158,16 @@ exports.createQuestion = async (req,res) => {
 exports.renderSingleQuestion = async(req,res) => {
     const {id} = req.params;
     const organizationNumber = req.user.currentOrgNumber;
-    const answers = await sequelize.query(`SELECT * FROM answer_${organizationNumber} WHERE questionId=?`,{
+    const answers = await sequelize.query(`SELECT * FROM answer_${organizationNumber} JOIN users ON users.id = answer_${organizationNumber}.userId WHERE questionId=?`,{
         type : QueryTypes.SELECT,
         replacements : [id]
     })
-    const question = await sequelize.query(`SELECT * FROM question_${organizationNumber} WHERE id=?`,{
+    const questions = await sequelize.query(`SELECT * FROM question_${organizationNumber} WHERE id=?`,{
         type : QueryTypes.SELECT,
         replacements : [id]
     })
 
-    res.render("dashboard/singleQuestion.ejs",{question , answers})
+    res.render("dashboard/singleQuestion.ejs",{questions , answers})
 }
 
 exports.answerQuestion = async(req,res) => {
