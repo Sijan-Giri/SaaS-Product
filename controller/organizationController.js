@@ -184,3 +184,13 @@ exports.answerQuestion = async(req,res) => {
         message : "Answer sent successfully"
     })
 }
+
+exports.renderMyOrgs = async(req,res) => {
+    const userId = req.userId;
+
+    const usersOrgsNumber = await sequelize.query(`SELECT organizationNumber FROM users_org WHERE userId=?`,{
+        type : QueryTypes.SELECT,
+        replacements : [userId]
+    })
+    res.render("dashboard/myOrgs.ejs")
+}
