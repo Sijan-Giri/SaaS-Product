@@ -63,9 +63,9 @@ exports.createOrganization = async (req, res , next) => {
             type: QueryTypes.RAW,
             replacements: [
                 organizationName,
+                organizationEmail,
                 organizationPhoneNumber,
                 organizationAddress,
-                organizationEmail,
                 organizationPanNumber,
                 organizationVatNumber,
             ],
@@ -192,5 +192,10 @@ exports.renderMyOrgs = async(req,res) => {
         type : QueryTypes.SELECT,
         replacements : [userId]
     })
-    res.render("dashboard/myOrgs.ejs")
+    const orgDatas = [];
+    for(var i = 0; i < usersOrgsNumber.length ; i++) {
+        const [orgData] = await sequelize.query(`SELECT * FROM organization_${usersOrgsNumber[i].organizationNumber}`);
+        orgDatas.push(orgData[0])
+    }
+    res.render("dashboard/myOrgs.ejs",{orgDatas})
 }
