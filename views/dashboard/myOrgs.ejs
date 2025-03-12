@@ -8,7 +8,48 @@
   <link rel="shortcut icon" type="image/png" href="/assets/images/logos/favicon.png" />
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
 </head>
+<style>
+  .page-wrapper {
+  width: 100%;
+  height: 100%;
+  padding-top: 0; /* Ensure there is no extra padding */
+}
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+  }
 
+  .delete-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #e74c3c;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .delete-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+  }
+
+  .delete-btn:active {
+    background-color: #8e1a1a;
+    transform: scale(1);
+  }
+
+  .delete-btn:focus {
+    outline: none;
+  }
+</style>
 <body>
   <!--  Body Wrapper -->
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
@@ -116,6 +157,9 @@
                           <h6 class="fw-semibold mb-0">Organization Name</h6>
                         </th>
                         <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Org Number</h6>
+                        </th>
+                        <th class="border-bottom-0">
                           <h6 class="fw-semibold mb-0">Email</h6>
                         </th>
                         <th class="border-bottom-0">
@@ -130,16 +174,21 @@
                         <th class="border-bottom-0">
                           <h6 class="fw-semibold mb-0">Vat Number</h6>
                         </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Action</h6>
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <% orgDatas.forEach((orgData) => { %>
+                      <% orgDatas.forEach((orgData , i) => { %>
                         <tr>
-                          <td class="border-bottom-0"><h6 class="fw-semibold mb-0"><%- orgData?.id %></h6></td>
+                          <td class="border-bottom-0"><h6 class="fw-semibold mb-0"><%- i + 1 %></h6></td>
                           <td class="border-bottom-0">
-                              <h6 class="fw-semibold mb-1"><%- orgData?.name %></h6>
-                              <span class="fw-normal">Web Designer</span>                          
+                              <h6 class="fw-semibold mb-1"><%- orgData?.name %></h6>                      
                           </td>
+                          <td class="border-bottom-0">
+                            <h6 class="fw-semibold mb-1"><%- orgData?.organizationNumber %></h6>                      
+                        </td>
                           <td class="border-bottom-0">
                             <p class="mb-0 fw-normal"><%- orgData?.email %></p>
                           </td>
@@ -156,6 +205,8 @@
                           </td>
                           <td class="border-bottom-0">
                             <h6 class="fw-semibold mb-0 fs-4"><%- orgData?.vatNo %></h6>
+                          </td><td class="border-bottom-0">
+                            <button class="delete-btn" onclick="window.location.href=`/organization/<%- orgData.organizationNumber %>`">Delete</button>
                           </td>
                         </tr>
                       <% }) %>                        

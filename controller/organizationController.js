@@ -195,7 +195,41 @@ exports.renderMyOrgs = async(req,res) => {
     const orgDatas = [];
     for(var i = 0; i < usersOrgsNumber.length ; i++) {
         const [orgData] = await sequelize.query(`SELECT * FROM organization_${usersOrgsNumber[i].organizationNumber}`);
-        orgDatas.push(orgData[0])
+        orgDatas.push({...orgData[0],organizationNumber: usersOrgsNumber[i].organizationNumber * 1})
     }
     res.render("dashboard/myOrgs.ejs",{orgDatas})
+}
+
+exports.deleteOrganization = async(req,res) => {
+    const {id : organizationNumber} = req.params;
+    const currentOrg = req.user.currentOrgNumber;
+    const userId = req.userId
+
+    await sequelize.query(`DROP TABLE IF EXISTS organization_${organizationNumber}`,{
+        type : QueryTypes.DELETE
+    })
+    await sequelize.query(`DROP TABLE IF EXISTS forum_${organizationNumber}`,{
+        type : QueryTypes.DELETE
+    })
+    await sequelize.query(`DROP TABLE IF EXISTS answer_${organizationNumber}`,{
+        type : QueryTypes.DELETE
+    })
+    await sequelize.query(`DELETE FROM users_org WHERE organizationNumber=?`,{
+        type : QueryTypes.DELETE,
+        replacements : [organizationNumber]
+    })
+
+    if(organizationNumber == currentOrg) {
+        const userOrgNumber = await sequelize.query(`SELECT organizationNumber FROM users_org WHERE userId=?`,{
+            type : QueryTypes.SELECT,
+            replacements : [userId]
+        })
+
+        const orgLength = userOrgNumber.length;
+        const previousOrg = userOrgNumber[orgLength-1];
+        const user = await users.findByPk(userId)
+        user.currentOrgNumber = previousOrg.organizationNumber
+        await user.save()
+    }
+    res.redirect("/myorgs")
 }
