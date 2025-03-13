@@ -233,3 +233,7 @@ exports.deleteOrganization = async(req,res) => {
     }
     res.redirect("/myorgs")
 }
+
+exports.renderInvitePage = async(req,res) => {
+    res.render("dashboard/invite.ejs")
+}
