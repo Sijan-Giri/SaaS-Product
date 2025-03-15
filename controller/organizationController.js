@@ -1,6 +1,9 @@
 const { QueryTypes } = require("sequelize");
 const { sequelize, users } = require("../model");
 
+const crypto = require('crypto');
+const sendEmail = require("../services/sendEmail");
+
 exports.renderOrganizationForm = (req, res) => {
     res.render("addOrganization");
 };
@@ -38,6 +41,17 @@ exports.createOrganization = async (req, res , next) => {
         `, {
             type: QueryTypes.RAW,
         });
+
+        await sequelize.query(`CREATE TABLE invitations_${organizationNumber}(
+        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY , 
+        userId INT REFERENCES users(id),
+        token VARCHAR(55) NOT NULL,
+        created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`,{
+            type : QueryTypes.CREATE
+        }
+        )
 
        
         await sequelize.query(`
@@ -234,6 +248,32 @@ exports.deleteOrganization = async(req,res) => {
     res.redirect("/myorgs")
 }
 
+function generateToken(length=32) {
+    return crypto.randomBytes(length).toString('hex')
+}
+
 exports.renderInvitePage = async(req,res) => {
-    res.render("dashboard/invite.ejs")
+    res.render("dashboard/invite.ejs");
+}
+
+exports.inviteFriends = async(req,res) => {
+    const {email} = req.body;
+    const currentOrg = req.user.currentOrgNumber;
+    const userEmail = req.user.email;
+    const userId = req.userId;
+
+    const token = generateToken(10)
+
+    await sequelize.query(`INSERT INTO invitations_${currentOrg}(userId , token) VALUES(?,?)`,{
+        type : QueryTypes.INSERT,
+        replacements : [userId,token]
+    })
+    await sendEmail({
+        email : email,
+        subject : "Invitation to join SaaS-Product Organization",
+        userEmail : userEmail,
+        invitationLink : `http://localhost:3000/accept-invite?org=${currentOrg}&token=${token}`
+    })
+
+    res.send("Invited successfully")
 }
