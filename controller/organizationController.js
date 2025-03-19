@@ -5,6 +5,11 @@ const crypto = require('crypto');
 const sendEmail = require("../services/sendEmail");
 
 exports.renderOrganizationForm = (req, res) => {
+    const {currentOrgNumber} = req.user;
+    if(currentOrgNumber) {
+        res.redirect("/dashboard");
+        return
+    }
     res.render("addOrganization");
 };
 
@@ -276,4 +281,24 @@ exports.inviteFriends = async(req,res) => {
     })
 
     res.send("Invited successfully")
+}
+
+exports.acceptInvitation = async(req,res) => {
+    const {token,org:orgNumber} = req.query;
+    const userId = req.userId
+
+    const [exists] = await sequelize.query(`SELECT * FROM invitations_${orgNumber} WHERE token=?`,{
+        type : QueryTypes.SELECT,
+        replacements : [token]
+    })
+
+    if(exists) {
+        const userData = await users.findByPk(userId);
+        userData.currentOrgNumber = orgNumber;
+        userData.save();
+        res.redirect("/dashboard");
+    }
+    else {
+        res.send("Invalid invitations link")
+    }
 }
