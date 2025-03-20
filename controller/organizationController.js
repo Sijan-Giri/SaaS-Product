@@ -193,6 +193,20 @@ exports.answerQuestion = async(req,res) => {
     const organizationNumber = req.user.currentOrgNumber;
     const {text , questionId} = req.body;
     const userId = req.userId;
+    const answerGrneyManxeKoEmail = req.user.email
+
+    const [data] = await sequelize.query(`SELECT users.email FROM question_${organizationNumber} JOIN users ON question_${organizationNumber}.userId = users.id WHERE question_${organizationNumber}.id=? `,{
+        type : QueryTypes.SELECT,
+        replacements : [questionId]
+    })
+
+    const questionGrneyManxeKoEmail = data.email;
+
+    await sendEmail({
+        email : questionGrneyManxeKoEmail,
+        subject : "Someone has answered to your question",
+        text : `${answerGrneyManxeKoEmail} has answered to your question . Do check it out!`
+    })
 
     await sequelize.query(`INSERT INTO answer_${organizationNumber} (userId , questionId , answer) VALUES (?,?,?)`,{
         type : QueryTypes.INSERT,
@@ -277,7 +291,7 @@ exports.inviteFriends = async(req,res) => {
         email : email,
         subject : "Invitation to join SaaS-Product Organization",
         userEmail : userEmail,
-        invitationLink : `http://localhost:3000/accept-invite?org=${currentOrg}&token=${token}`
+        text : `${userEmail} has invited you to join his/her organization. Click here to joinhttp://localhost:3000/accept-invite?org=${currentOrg}&token=${token}`
     })
 
     res.send("Invited successfully")
