@@ -316,3 +316,31 @@ exports.acceptInvitation = async(req,res) => {
         res.send("Invalid invitations link")
     }
 }
+
+exports.deleteQuestion = async(req,res) => {
+    const userId = req.userId;
+    const organizationNumber = req.user.currentOrgNumber
+    const {id:answerId} = req.params;
+
+    const [answer] = await sequelize.query(`SELECT * FROM answer_${organizationNumber} WHERE id=?`,{
+        type : QueryTypes.SELECT,
+        replacements : [answerId]
+    })
+    if(!answer) {
+        res.send("Answer doesn't exists with that Id");
+    }else {
+        if(answer.userId !== userId) {
+            res.send("You don't have permission to perform this action")
+        }else {
+            await sequelize.query(`DELETE FROM answer_${organizationNumber} WHERE id=?`,{
+                type : QueryTypes.DELETE,
+                replacements : [answerId]
+            })
+            res.redirect("/question/" + answerId)
+        }
+    }
+}
+
+exports.deleteAnswer = async(req,res) => {
+    
+}
