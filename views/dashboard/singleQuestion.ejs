@@ -147,6 +147,7 @@
               <i>Answered By:- <%- answer.username %></i> <br>
               <i> <%- answer.created_At.toString().slice(0,15) %></i>
             </div>
+            <a href="/answer/<%- answer.id %>"><button class="see-more-btn" style="background-color:red; margin-top: 4px">Delete</button></a>
           </div>
         <% }) %>
 

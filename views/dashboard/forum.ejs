@@ -135,7 +135,8 @@
               <p class="mb-0">Asked By:- <%- question.username %> </p>
               <p class="mb-0">Created At:- <%- question.created_At.toString().slice(0,15) %> </p>
             </div>
-            <button class="see-more-btn" onclick="window.location.href='/question/<%= question.id %>'">See More</button>
+            <button class="see-more-btn" onclick="window.location.href='/question/<%- question.id %>'">See More</button>
+            <a href="/questionDelete/<%- question.id %>"><button class="see-more-btn" style="background-color:red; margin-top: 4px">Delete</button></a>
           </div>
        <% }) %>
       </div>

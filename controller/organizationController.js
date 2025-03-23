@@ -320,6 +320,30 @@ exports.acceptInvitation = async(req,res) => {
 exports.deleteQuestion = async(req,res) => {
     const userId = req.userId;
     const organizationNumber = req.user.currentOrgNumber
+    const {id:questionId} = req.params;
+
+    const [question] = await sequelize.query(`SELECT * FROM question_${organizationNumber} WHERE id=?`,{
+        type : QueryTypes.SELECT,
+        replacements : [questionId]
+    })
+    if(!question) {
+        res.send("Question doesn't exists with that Id");
+    }else {
+        if(question.userId !== userId) {
+            res.send("You don't have permission to perform this action")
+        }else {
+            await sequelize.query(`DELETE FROM question_${organizationNumber} WHERE id=?`,{
+                type : QueryTypes.DELETE,
+                replacements : [questionId]
+            })
+            res.redirect("/forum")
+        }
+    }
+}
+
+exports.deleteAnswer = async(req,res) => {
+    const userId = req.userId;
+    const organizationNumber = req.user.currentOrgNumber
     const {id:answerId} = req.params;
 
     const [answer] = await sequelize.query(`SELECT * FROM answer_${organizationNumber} WHERE id=?`,{
@@ -336,11 +360,7 @@ exports.deleteQuestion = async(req,res) => {
                 type : QueryTypes.DELETE,
                 replacements : [answerId]
             })
-            res.redirect("/question/" + answerId)
+            res.redirect("/forum")
         }
     }
-}
-
-exports.deleteAnswer = async(req,res) => {
-    
 }

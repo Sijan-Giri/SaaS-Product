@@ -18,7 +18,7 @@ router.route("/question").get(isAuthenticated , renderQuestionPage).post(isAuthe
 
 router.route("/question/:id").get(isAuthenticated , renderSingleQuestion)
 
-router.route('/deleteQuestion/:id').get(isAuthenticated , deleteQuestion)
+router.route('/questionDelete/:id').get(isAuthenticated , deleteQuestion)
 
 router.route("/answer").post(isAuthenticated,answerQuestion);
 
@@ -30,6 +30,6 @@ router.route("/invite").get(isAuthenticated,renderInvitePage).post(isAuthenticat
 
 router.route("/accept-invite").get(isAuthenticated , acceptInvitation)
 
-router.route('/answer/:id').delete(isAuthenticated , deleteAnswer)
+router.route('/answer/:id').get(isAuthenticated , deleteAnswer)
 
 module.exports = router
