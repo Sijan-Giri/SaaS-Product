@@ -175,9 +175,10 @@ exports.createQuestion = async (req,res) => {
 }
 
 exports.renderSingleQuestion = async(req,res) => {
+    const userId = req.userId;
     const {id} = req.params;
     const organizationNumber = req.user.currentOrgNumber;
-    const answers = await sequelize.query(`SELECT * FROM answer_${organizationNumber} JOIN users ON users.id = answer_${organizationNumber}.userId WHERE questionId=?`,{
+    const answers = await sequelize.query(`SELECT answer_${organizationNumber}.*,users.username FROM answer_${organizationNumber} JOIN users ON users.id = answer_${organizationNumber}.userId WHERE questionId=?`,{
         type : QueryTypes.SELECT,
         replacements : [id]
     })
@@ -186,7 +187,7 @@ exports.renderSingleQuestion = async(req,res) => {
         replacements : [id]
     })
 
-    res.render("dashboard/singleQuestion.ejs",{questions , answers})
+    res.render("dashboard/singleQuestion.ejs",{questions , answers , userId})
 }
 
 exports.answerQuestion = async(req,res) => {
@@ -291,7 +292,7 @@ exports.inviteFriends = async(req,res) => {
         email : email,
         subject : "Invitation to join SaaS-Product Organization",
         userEmail : userEmail,
-        text : `${userEmail} has invited you to join his/her organization. Click here to joinhttp://localhost:3000/accept-invite?org=${currentOrg}&token=${token}`
+        text : `${userEmail} has invited you to join his/her organization. Click here to join http://localhost:3000/accept-invite?org=${currentOrg}&token=${token}`
     })
 
     res.send("Invited successfully")
@@ -360,7 +361,7 @@ exports.deleteAnswer = async(req,res) => {
                 type : QueryTypes.DELETE,
                 replacements : [answerId]
             })
-            res.redirect("/forum")
+            res.redirect("/question/"+answer.questionId)
         }
     }
 }
