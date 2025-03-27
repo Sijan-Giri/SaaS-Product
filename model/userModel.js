@@ -15,8 +15,11 @@ module.exports = (sequelize,DataTypes)=>{
             unique : true
         },
         currentOrgNumber : {
-            type : DataTypes.INTEGER,
-            
+            type : DataTypes.INTEGER   
+        },
+        role : {
+            type : DataTypes.ENUM('user','admin'),
+            defaultValue : 'user'
         }
     })
     return User

@@ -178,6 +178,7 @@ exports.renderSingleQuestion = async(req,res) => {
     const userId = req.userId;
     const {id} = req.params;
     const organizationNumber = req.user.currentOrgNumber;
+    
     const answers = await sequelize.query(`SELECT answer_${organizationNumber}.*,users.username FROM answer_${organizationNumber} JOIN users ON users.id = answer_${organizationNumber}.userId WHERE questionId=?`,{
         type : QueryTypes.SELECT,
         replacements : [id]
@@ -364,4 +365,17 @@ exports.deleteAnswer = async(req,res) => {
             res.redirect("/question/"+answer.questionId)
         }
     }
+}
+
+exports.logOut = async(req,res) => {
+    res.clearCookie("token");
+    res.redirect("/")
+}
+
+exports.fetchUsers = async(req,res) => {
+    const users = await sequelize.query(`SELECT * FROM users` ,{
+        type : QueryTypes.SELECT
+    })
+    console.log(users)
+    res.render("views/dashboard/index.ejs",{users})
 }

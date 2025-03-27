@@ -1,5 +1,6 @@
 const {Sequelize,DataTypes} = require('sequelize')
 const dbConfig = require('../config/dbConfig')
+const {users} = require("./userModel")
 
 const sequelize = new Sequelize(dbConfig.db,dbConfig.username,dbConfig.password,{
     host : dbConfig.host,
@@ -13,8 +14,8 @@ const sequelize = new Sequelize(dbConfig.db,dbConfig.username,dbConfig.password,
     }
 })
 
-sequelize.authenticate().then(()=>{
-    console.log("Database connected successfully..")
+sequelize.authenticate().then(async()=>{
+    console.log("Database connected successfully..");
 })
 .catch((err)=>{
     console.log(err)
