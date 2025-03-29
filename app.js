@@ -6,7 +6,7 @@ const passport = require("passport");
 const {users}  = require("./model/index");
 const generateToken = require("./services/generateToken");
 const organizationRoute = require("./routes/organizationRoutes")
-const cookieParser = require("cookie-parser")
+const cookieParser = require("cookie-parser");
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));

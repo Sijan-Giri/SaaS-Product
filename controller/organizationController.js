@@ -142,8 +142,12 @@ exports.createAnswerTable = async(req,res) => {
         res.redirect("/dashboard")
 }
 
-exports.renderDashboard = (req,res) => {
-    res.render("dashboard/index.ejs")
+exports.renderDashboard = async(req,res) => {
+    const users = await sequelize.query(`SELECT * FROM users` ,{
+        type : QueryTypes.SELECT
+    })
+
+    res.render("dashboard/index.ejs",{users})
 } 
 
 exports.renderForumPage = async(req,res) => {
@@ -372,10 +376,3 @@ exports.logOut = async(req,res) => {
     res.redirect("/")
 }
 
-exports.fetchUsers = async(req,res) => {
-    const users = await sequelize.query(`SELECT * FROM users` ,{
-        type : QueryTypes.SELECT
-    })
-    console.log(users)
-    res.render("views/dashboard/index.ejs",{users})
-}

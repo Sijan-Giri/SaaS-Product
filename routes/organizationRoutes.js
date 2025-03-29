@@ -34,6 +34,4 @@ router.route("/logout").get(isAuthenticated , logOut)
 
 router.route('/answer/:id').get(isAuthenticated , deleteAnswer)
 
-router.route("/fetchUsers").get(fetchUsers)
-
 module.exports = router
